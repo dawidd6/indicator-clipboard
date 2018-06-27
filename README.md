@@ -4,7 +4,7 @@
 
 ![Screen](screen.png)
 
-### Installing from PPA
+### Installing from PPA - NOT YET AVAILABLE
 
 ```sh
 sudo add-apt-repository ppa:dawidd0811/indicators
