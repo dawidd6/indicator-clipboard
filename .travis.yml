@@ -1,0 +1,17 @@
+language: cpp
+
+sudo: required
+dist: trusty
+
+addons:
+ apt:
+  packages:
+  - build-essential
+  - libnotify-dev
+  - qtbase5-dev
+
+script:
+- cmake . && make
+
+notifications:
+ email: false

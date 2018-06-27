@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Clipboard Indicator
+GenericName=Clipboard Indicator
+Comment=Clipboard indicator
+Exec=indicator-clipboard
+Terminal=false
+Type=Application
+Icon=com.github.dawidd6.indicator-clipboard
+Categories=Utility;
+StartupNotify=false
+X-GNOME-autostart-enabled=true
