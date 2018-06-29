@@ -1,0 +1,17 @@
+Source: indicator-clipboard
+Section: utils
+Priority: optional
+Maintainer: Dawid Dziurla <dawidd0811@gmail.com>
+Build-Depends: debhelper (>=9), cmake, libnotify-dev, qtbase5-dev
+Standards-Version: 3.9.6
+Homepage: https://github.com/dawidd6/indicator-clipboard
+
+Package: indicator-clipboard
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Clipboard indicator
+ long description
+ long description
+ long description
+ long description
+ long description
