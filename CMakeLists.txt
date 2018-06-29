@@ -30,6 +30,7 @@ target_link_libraries(${PROJECT_NAME}
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES data/${PROJECT_NAME}.desktop DESTINATION share/applications RENAME ${PNAME}.desktop)
+install(FILES data/${PROJECT_NAME}.desktop DESTINATION /etc/xdg/autostart RENAME ${PNAME}.desktop)
 install(FILES data/icon.svg DESTINATION share/icons/hicolor/scalable/apps RENAME ${PNAME}.svg)
 install(FILES data/icon_16.png DESTINATION share/icons/hicolor/16x16/apps RENAME ${PNAME}.png)
 install(FILES data/icon_20.png DESTINATION share/icons/hicolor/20x20/apps RENAME ${PNAME}.png)
