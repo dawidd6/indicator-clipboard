@@ -4,7 +4,7 @@
 
 ![Screen](screen.png)
 
-### Installing from PPA - NOT YET AVAILABLE
+### Installing from PPA
 
 ```sh
 sudo add-apt-repository ppa:dawidd0811/indicators
@@ -15,7 +15,7 @@ sudo apt-get install indicator-clipboard
 ### Building from source
 
 ```sh
-sudo apt install qtbase5-dev libnotify-dev
+sudo apt install cmake qtbase5-dev libnotify-dev
 cmake .
 make
 sudo make install
