@@ -70,7 +70,7 @@ void Tray::deleteOldEntries() {
 
 void Tray::trim(QString &text, int index) {
     text = text.trimmed();
-    index = index > -1 ? index : 30;
+    index = index > -1  && index < 30 ? index : 30;
     if(text.length() > index) {
         text.truncate(index);
         text += "...";
