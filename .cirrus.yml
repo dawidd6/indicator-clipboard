@@ -1,6 +1,6 @@
 task:
     container:
-        image: ubuntu:xenial
+        image: ubuntu:trusty
     script:
         - apt-get update && apt-get install -y cmake build-essential qtbase5-dev libnotify-dev
         - cmake .
