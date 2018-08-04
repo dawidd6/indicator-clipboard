@@ -10,85 +10,110 @@
 #include <QIcon>
 #include <QDebug>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
+class Tray : public QSystemTrayIcon {
     QVector <QAction*> actions;
     QVector <QString> strings;
-    QSystemTrayIcon tray;
-    QMenu menu;
-    QClipboard *clipboard = QApplication::clipboard();
-    QString icon_name = "com.github.dawidd6.indicator-clipboard";
-    QIcon icon = QIcon::fromTheme(icon_name);
-    QAction *quit = menu.addAction("Quit");
-    QAction *action = nullptr;
-    QAction *separator = nullptr;
+    QString iconName;
+    QIcon icon;
+    QMenu *menu;
+    QAction *quit;
+    QAction *action;
+    QAction *separator;
+    QClipboard *clipboard;
 
-    notify_init("indicator-clipboard");
+    public:
+        Tray() {
+            menu = new QMenu();
+            iconName = "com.github.dawidd6.indicator-clipboard";
+            icon = QIcon::fromTheme(iconName);
+            clipboard = QApplication::clipboard();
 
-    QObject::connect(quit, &QAction::triggered, &a, &QApplication::quit);
+            quit = menu->addAction("Quit");
+            action = nullptr;
+            separator = nullptr;
 
-    QObject::connect(clipboard, &QClipboard::dataChanged, [&]
-    {
-        QString text = clipboard->text();
-        bool dupe = false;
+            notify_init("indicator-clipboard");
 
-        for(int i = 0; i < actions.size(); i++)
-            if(text == strings[i])
-                dupe = true;
+            connect(quit, &QAction::triggered, &QApplication::quit);
+            connect(clipboard, &QClipboard::dataChanged, this, &Tray::onDataChanged);
 
-        if(!dupe)
-        {
+            setContextMenu(menu);
+            setIcon(icon);
+            show();
+        }
+
+        ~Tray() override {
+            delete menu;
+            notify_uninit();
+        }
+
+        void onDataChanged() {
+            QString text = clipboard->text();
+
+            for(int i = 0; i < actions.size(); i++)
+                if(text == strings[i])
+                    return;
             strings.append(text);
-            text = text.trimmed();
 
-            int i = text.indexOf('\n');
-            i = i > -1 ? i : 30;
-            if(text.length() > i)
-            {
-                text.truncate(i);
+            checkSeparator();
+            trim(text, text.indexOf('\n'));
+            addNewEntry(text);
+            deleteOldEntries();
+        }
+
+        void onEntryTriggered() {
+            auto *action = (QAction *)sender();
+            for(int i = 0; i < actions.size(); i++)
+                if(action == actions[i]) {
+                    clipboard->setText(strings[i]);
+                    showNotification(actions[i]->text());
+                }
+        }
+
+        void addNewEntry(const QString &text) {
+            action = new QAction(text, menu);
+            menu->insertAction(separator, action);
+            actions.append(action);
+            connect(action, &QAction::triggered, this, &Tray::onEntryTriggered);
+        }
+
+        void deleteOldEntries() {
+            if(actions.size() > 5) {
+                actions.first()->disconnect();
+                menu->removeAction(actions.first());
+                actions.removeFirst();
+                strings.removeFirst();
+            }
+        }
+
+        void trim(QString &text, int index) {
+            text = text.trimmed();
+            index = index > -1 ? index : 30;
+            if(text.length() > index) {
+                text.truncate(index);
                 text += "...";
             }
+        }
 
-            if(separator == nullptr)
-            {
-                separator = new QAction(&menu);
+        void showNotification(const QString &text) {
+            notify_notification_show(
+                    notify_notification_new("Text copied to clipboard",
+                            qPrintable(text),
+                            qPrintable(iconName)),
+                            nullptr);
+        }
+
+        void checkSeparator() {
+            if(separator == nullptr) {
+                separator = new QAction(menu);
                 separator->setSeparator(true);
-                menu.insertAction(quit, separator);
+                menu->insertAction(quit, separator);
             }
-
-            action = new QAction(text, &menu);
-            actions.append(action);
-            menu.insertAction(separator, action);
         }
+};
 
-        if(actions.size() > 5)
-        {
-            delete actions.first();
-            menu.removeAction(actions.first());
-            actions.erase(actions.begin());
-            strings.erase(strings.begin());
-        }
-
-        for(int i = 0; i < actions.size(); i++)
-        {
-            actions[i]->disconnect();
-            QObject::connect(actions[i], &QAction::triggered, [&, i]
-            {
-                clipboard->setText(strings[i]);
-                notify_notification_show(
-                notify_notification_new("Text copied to clipboard",
-                                        qPrintable(actions[i]->text()),
-                                        qPrintable(icon_name))
-                                        , NULL);
-            });
-        }
-    });
-
-    tray.setContextMenu(&menu);
-    tray.setIcon(icon);
-    tray.show();
-
-    a.exec();
-    notify_uninit();
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    Tray tray;
+    return QApplication::exec();
 }
