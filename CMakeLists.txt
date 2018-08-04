@@ -9,15 +9,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBNOTIFY REQUIRED libnotify)
 pkg_check_modules(QT5WIDGETS REQUIRED Qt5Widgets>=5.5)
 
-include_directories(${LIBNOTIFY_INCLUDE_DIRS}
-                    ${QT5WIDGETS_INCLUDE_DIRS})
-
-link_directories(${LIBNOTIFY_LIBRARY_DIRS}
-                 ${QT5WIDGETS_LIBRARY_DIRS})
-
-add_definitions("-std=c++11 -fPIC"
-                ${LIBNOTIFY_CFLAGS_OTHER}
-                ${QT5WIDGETS_CFLAGS_OTHER})
+add_definitions(${LIBNOTIFY_CFLAGS_OTHER} ${QT5WIDGETS_CFLAGS_OTHER} "-std=c++11 -fPIC")
+include_directories(${LIBNOTIFY_INCLUDE_DIRS} ${QT5WIDGETS_INCLUDE_DIRS})
+link_directories(${LIBNOTIFY_LIBRARY_DIRS} ${QT5WIDGETS_LIBRARY_DIRS})
 
 add_library(lib src/${PROJECT_NAME}.cpp src/${PROJECT_NAME}.h)
 
