@@ -7,7 +7,7 @@ set(PNAME com.github.dawidd6.${PROJECT_NAME})
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(LIBNOTIFY REQUIRED libnotify)
-pkg_check_modules(QT5WIDGETS REQUIRED Qt5Widgets>=5.5)
+pkg_check_modules(QT5WIDGETS REQUIRED Qt5Widgets>=5.2.1)
 
 add_definitions(${LIBNOTIFY_CFLAGS_OTHER} ${QT5WIDGETS_CFLAGS_OTHER} "-std=c++11 -fPIC")
 include_directories(${LIBNOTIFY_INCLUDE_DIRS} ${QT5WIDGETS_INCLUDE_DIRS})
