@@ -21,7 +21,7 @@ add_definitions("-std=c++11 -fPIC"
                 ${QT5WIDGETS_CFLAGS_OTHER})
 
 add_executable(${PROJECT_NAME}
-               ${PROJECT_NAME}.cpp)
+               src/${PROJECT_NAME}.cpp)
 
 target_link_libraries(${PROJECT_NAME}
                       ${LIBNOTIFY_LIBRARIES}
