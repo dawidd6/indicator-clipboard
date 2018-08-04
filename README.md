@@ -1,6 +1,6 @@
 # Clipboard Indicator
 
-[![Build Status](https://travis-ci.org/dawidd6/indicator-clipboard.svg?branch=master)](https://travis-ci.org/dawidd6/indicator-clipboard)
+[![Build Status](https://api.cirrus-ci.com/github/dawidd6/indicator-clipboard.svg)](https://cirrus-ci.com/github/dawidd6/indicator-clipboard)
 
 ![Screen](screen.png)
 
