@@ -62,6 +62,7 @@ void Tray::deleteOldEntries() {
     if(actions.size() > 5) {
         actions.first()->disconnect();
         menu->removeAction(actions.first());
+        delete actions.first();
         actions.removeFirst();
         strings.removeFirst();
     }
