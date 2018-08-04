@@ -26,7 +26,7 @@ class Tray : public QSystemTrayIcon {
         void onEntryTriggered();
         void addNewEntry(const QString &text);
         void deleteOldEntries();
-        void trim(QString &text, int index);
+        static void trim(QString &text, int index);
         void showNotification(const QString &text);
         void checkSeparator();
 };

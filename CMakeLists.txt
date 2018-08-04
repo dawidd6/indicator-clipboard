@@ -9,7 +9,6 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBNOTIFY REQUIRED libnotify)
 pkg_check_modules(QT5WIDGETS REQUIRED Qt5Widgets>=5.5)
 
-
 include_directories(${LIBNOTIFY_INCLUDE_DIRS}
                     ${QT5WIDGETS_INCLUDE_DIRS})
 
@@ -20,14 +19,19 @@ add_definitions("-std=c++11 -fPIC"
                 ${LIBNOTIFY_CFLAGS_OTHER}
                 ${QT5WIDGETS_CFLAGS_OTHER})
 
-add_executable(${PROJECT_NAME}
-                src/main.cpp
-                src/${PROJECT_NAME}.cpp
-                src/${PROJECT_NAME}.h)
+add_library(lib src/${PROJECT_NAME}.cpp src/${PROJECT_NAME}.h)
 
-target_link_libraries(${PROJECT_NAME}
-                      ${LIBNOTIFY_LIBRARIES}
-                      ${QT5WIDGETS_LIBRARIES})
+# main
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} lib ${LIBNOTIFY_LIBRARIES} ${QT5WIDGETS_LIBRARIES})
+
+# tests
+enable_testing()
+
+add_executable(trim_test tests/trim.cpp)
+target_link_libraries(trim_test lib ${LIBNOTIFY_LIBRARIES} ${QT5WIDGETS_LIBRARIES})
+
+add_test(trim_test trim_test)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES data/${PROJECT_NAME}.desktop DESTINATION share/applications RENAME ${PNAME}.desktop)
