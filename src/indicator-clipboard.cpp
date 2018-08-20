@@ -34,12 +34,15 @@ void Tray::onDataChanged() {
     for(int i = 0; i < actions.size(); i++)
         if(text == strings[i])
             return;
-    strings.append(text);
 
-    checkSeparator();
-    trim(text, text.indexOf('\n'));
-    addNewEntry(text);
-    deleteOldEntries();
+    if(!text.trimmed().isEmpty())
+    {
+        strings.append(text);
+        checkSeparator();
+        trim(text, text.indexOf('\n'));
+        addNewEntry(text);
+        deleteOldEntries();
+    }
 }
 
 void Tray::onEntryTriggered() {
